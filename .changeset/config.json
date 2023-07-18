@@ -1,9 +1,6 @@
 {
 	"$schema": "https://unpkg.com/@changesets/config@2.3.0/schema.json",
-	"changelog": [
-		"@changesets/cli/changelog",
-		{ "repo": "AdrianGonz97/vite-plugin-tailwind-purgecss" }
-	],
+	"changelog": ["@changesets/cli/changelog", { "repo": "AdrianGonz97/vite-plugin-tailwind-purge" }],
 	"commit": false,
 	"fixed": [],
 	"linked": [],
