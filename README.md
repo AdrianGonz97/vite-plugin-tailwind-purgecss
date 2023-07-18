@@ -1,6 +1,6 @@
 # vite-plugin-tailwind-purge
 
-[![npm version](https://img.shields.io/npm/v/vite-plugin-tailwind-purgecss?logo=npm&color=cb3837)](https://www.npmjs.com/package/vite-plugin-tailwind-purgecss)
+[![npm version](https://img.shields.io/npm/v/vite-plugin-tailwind-purge?logo=npm&color=cb3837)](https://www.npmjs.com/package/vite-plugin-tailwind-purge)
 [![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-svelte-purgecss/blob/main/LICENSE)
 
 A simple vite plugin that **thoroughly** purges excess CSS using [PurgeCSS](https://purgecss.com/). This package should be used in combination with [Tailwind](https://tailwindcss.com/) and a Tailwind specific UI library such as [Skeleton](https://skeleton.dev) or [Flowbite](https://flowbite.com/).
