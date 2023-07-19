@@ -62,6 +62,11 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 						if (node.type === 'Identifier') {
 							extractor(node.name).forEach((selector) => selectors.add(selector));
 						}
+						if (node.type === 'TemplateElement') {
+							extractor(node.value.cooked ?? node.value.raw).forEach((selector) =>
+								selectors.add(selector)
+							);
+						}
 					},
 				});
 			}
