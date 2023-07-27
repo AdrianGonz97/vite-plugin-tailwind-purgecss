@@ -29,7 +29,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	const moduleIds = new Set<string>();
 
 	return {
-		name: 'vite-plugin-svelte-purgecss',
+		name: 'vite-plugin-tailwind-purgecss',
 		apply: 'build',
 		enforce: 'post',
 
