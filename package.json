@@ -1,12 +1,12 @@
 {
-	"name": "vite-plugin-tailwind-purge",
-	"version": "0.0.2",
+	"name": "vite-plugin-tailwind-purgecss",
+	"version": "0.0.0",
 	"description": "Vite plugin for PurgeCSS",
 	"module": "dist/index.mjs",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
 	"repository": {
-		"url": "https://github.com/AdrianGonz97/vite-plugin-tailwind-purge",
+		"url": "https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss",
 		"type": "git"
 	},
 	"exports": {
@@ -29,9 +29,10 @@
 		"svelte",
 		"rollup",
 		"tailwind",
+		"tailwindcss",
 		"vite",
-		"skeleton",
-		"vite-plugin"
+		"vite-plugin",
+		"skeleton"
 	],
 	"author": "AdrianGonz97",
 	"license": "MIT",

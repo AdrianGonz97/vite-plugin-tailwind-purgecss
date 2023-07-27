@@ -1,7 +1,7 @@
-# vite-plugin-tailwind-purge
+# vite-plugin-tailwind-purgecss
 
-[![npm version](https://img.shields.io/npm/v/vite-plugin-tailwind-purge?logo=npm&color=cb3837)](https://www.npmjs.com/package/vite-plugin-tailwind-purge)
-[![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purge/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/vite-plugin-tailwind-purgecss?logo=npm&color=cb3837)](https://www.npmjs.com/package/vite-plugin-tailwind-purgecss)
+[![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/main/LICENSE)
 
 A simple vite plugin that **thoroughly** purges excess CSS using [PurgeCSS](https://purgecss.com/). This package should be used in combination with [Tailwind](https://tailwindcss.com/) and a Tailwind UI component library such as [Skeleton](https://skeleton.dev) or [Flowbite](https://flowbite.com/).
 
@@ -28,14 +28,14 @@ This package is still very **experimental**. Breaking changes can occur at any t
 ### Installation
 
 ```bash
-npm i -D vite-plugin-tailwind-purge
+npm i -D vite-plugin-tailwind-purgecss
 ```
 
 ### Add to Vite
 
 ```ts
 // vite.config.ts
-import { purgeCss } from 'vite-plugin-tailwind-purge';
+import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 const config: UserConfig = {
 	plugins: [sveltekit(), purgeCss()],
@@ -48,7 +48,7 @@ If selectors that shouldn't be purged are being removed, simply add them to the 
 
 ```ts
 // vite.config.ts
-import { purgeCss } from 'vite-plugin-tailwind-purge';
+import { purgeCss } from 'vite-plugin-tailwind-purgecss';
 
 const config: UserConfig = {
 	plugins: [
