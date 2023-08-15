@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.1.1
+
+### Patch Changes
+
+- 47b85eb: fix: Reduced processing time by only extracting selectors from string literals of a certain max length
+
 ## 0.1.0
 
 ### Minor Changes
