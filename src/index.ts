@@ -61,15 +61,22 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				walk(ast, {
 					enter(node, parent, key, index) {
 						if (node.type === 'Literal' && typeof node.value === 'string') {
-							extractor(node.value).forEach((selector) => selectors.add(selector));
+							node.value.split(/\s+/).forEach((word) => {
+								if (word.length < 250) {
+									extractor(word).forEach((selector) => selectors.add(selector));
+								} else selectors.add(word);
+							});
 						}
 						if (node.type === 'Identifier') {
-							extractor(node.name).forEach((selector) => selectors.add(selector));
+							selectors.add(node.name);
 						}
 						if (node.type === 'TemplateElement') {
-							extractor(node.value.cooked ?? node.value.raw).forEach((selector) =>
-								selectors.add(selector)
-							);
+							const value = node.value.cooked ?? node.value.raw;
+							value.split(/\s+/).forEach((word) => {
+								if (word.length < 250) {
+									extractor(word).forEach((selector) => selectors.add(selector));
+								} else selectors.add(word);
+							});
 						}
 					},
 				});
