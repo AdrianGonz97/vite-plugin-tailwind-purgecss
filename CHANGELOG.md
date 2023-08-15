@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.1.0
+
+### Minor Changes
+
+- aef2c21: feat: Upgraded `purgecss` to `6.0.0-alpha.0`
+
 ## 0.0.4
 
 ### Patch Changes
