@@ -4,6 +4,7 @@ import { walk } from 'estree-walker';
 import { join } from 'path';
 import type { ResolvedConfig, Plugin } from 'vite';
 import type { ComplexSafelist, StringRegExpArray, UserDefinedOptions } from 'purgecss';
+import { parse } from 'css-what';
 
 type Extractor = (content: string) => string[];
 
@@ -23,6 +24,9 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		'body',
 		/aria-current/,
 		/svelte-/,
+		// fix for pseudo-class functions that begin with `:` getting purged (e.g. `:is`)
+		// see: https://github.com/FullHuman/purgecss/issues/978
+		/^\:[-a-z]+$/,
 		...(purgeOptions?.safelist?.standard ?? []),
 	];
 	const extractor = (purgeOptions?.defaultExtractor as Extractor) ?? defaultExtractor();
@@ -77,21 +81,30 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				}
 			}
 
-			const selectorsArr = Array.from(selectors);
+			for (const selector of selectors) {
+				try {
+					parse(selector);
+					new RegExp(selector);
+					standard.push(selector);
+				} catch (e) {
+					// console.log(`${selector} failed to transform into a regex`);
+				}
+			}
+			// console.dir(
+			// 	{ selectors: standard },
+			// 	{ maxArrayLength: Infinity, maxStringLength: Infinity, depth: Infinity }
+			// );
 
 			for (const [fileName, asset] of Object.entries(assets)) {
 				const purgeCSSResult = await new PurgeCSS().purge({
 					...purgeOptions,
 					content: [join(viteConfig.root, '**/*.html'), ...(purgeOptions?.content ?? [])],
 					css: [{ raw: (asset.source as string).trim(), name: fileName }],
-					keyframes: true,
-					fontFace: true,
 					rejected: true,
 					rejectedCss: true,
-					variables: true,
 					safelist: {
 						...purgeOptions?.safelist,
-						standard: [...standard, ...selectorsArr],
+						standard,
 						greedy: [/svelte-/, ...(purgeOptions?.safelist?.greedy ?? [])],
 					},
 				});
@@ -99,6 +112,11 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				if (purgeCSSResult[0]) {
 					// prevent the original from being written
 					delete bundle[asset.fileName];
+
+					// console.dir(
+					// 	{ purge: purgeCSSResult[0] },
+					// 	{ maxArrayLength: Infinity, maxStringLength: Infinity, depth: Infinity }
+					// );
 
 					// emit the newly purged css file
 					this.emitFile({
