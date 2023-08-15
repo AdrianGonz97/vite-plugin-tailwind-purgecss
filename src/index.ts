@@ -14,6 +14,7 @@ type Options = Partial<UserDefinedOptions> & {
 type PurgeOptions = Omit<Options, 'css'>;
 
 const EXT_CSS = /\.(css)$/;
+const MAX_STRING_LITERAL_LENGTH = 2000;
 
 export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	let viteConfig: ResolvedConfig;
@@ -61,15 +62,22 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				walk(ast, {
 					enter(node, parent, key, index) {
 						if (node.type === 'Literal' && typeof node.value === 'string') {
-							extractor(node.value).forEach((selector) => selectors.add(selector));
+							node.value.split(/\s+/).forEach((word) => {
+								if (word.length < MAX_STRING_LITERAL_LENGTH) {
+									extractor(word).forEach((selector) => selectors.add(selector));
+								} else selectors.add(word);
+							});
 						}
 						if (node.type === 'Identifier') {
-							extractor(node.name).forEach((selector) => selectors.add(selector));
+							selectors.add(node.name);
 						}
 						if (node.type === 'TemplateElement') {
-							extractor(node.value.cooked ?? node.value.raw).forEach((selector) =>
-								selectors.add(selector)
-							);
+							const value = node.value.cooked ?? node.value.raw;
+							value.split(/\s+/).forEach((word) => {
+								if (word.length < MAX_STRING_LITERAL_LENGTH) {
+									extractor(word).forEach((selector) => selectors.add(selector));
+								} else selectors.add(word);
+							});
 						}
 					},
 				});
