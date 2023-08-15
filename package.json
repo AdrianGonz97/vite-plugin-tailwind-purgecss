@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-tailwind-purgecss",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Vite plugin for PurgeCSS",
 	"module": "dist/index.mjs",
 	"main": "dist/index.js",
