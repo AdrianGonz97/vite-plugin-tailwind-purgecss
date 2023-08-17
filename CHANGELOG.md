@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.1.2
+
+### Patch Changes
+
+- c9eb647: fix: Tailwind's arbitrary values are no longer erroneously removed
+
 ## 0.1.1
 
 ### Patch Changes
