@@ -2,4 +2,4 @@
 'vite-plugin-tailwind-purgecss': patch
 ---
 
-fix: Tailwind arbitrary values are no longer erroneously removed
+fix: Tailwind's arbitrary values are no longer erroneously removed
