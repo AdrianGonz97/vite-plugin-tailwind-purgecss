@@ -4,7 +4,6 @@ import { walk } from 'estree-walker';
 import { join } from 'path';
 import type { ResolvedConfig, Plugin } from 'vite';
 import type { ComplexSafelist, StringRegExpArray, UserDefinedOptions } from 'purgecss';
-import { parse } from 'css-what';
 
 type Extractor = (content: string) => string[];
 
@@ -14,7 +13,7 @@ type Options = Partial<UserDefinedOptions> & {
 type PurgeOptions = Omit<Options, 'css'>;
 
 const EXT_CSS = /\.(css)$/;
-const MAX_STRING_LITERAL_LENGTH = 2000;
+const MAX_STRING_LITERAL_LENGTH = 50_000;
 
 export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	let viteConfig: ResolvedConfig;
@@ -90,18 +89,8 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			}
 
 			for (const selector of selectors) {
-				try {
-					parse(selector);
-					new RegExp(selector);
-					standard.push(selector);
-				} catch (e) {
-					// console.log(`${selector} failed to transform into a regex`);
-				}
+				standard.push(selector);
 			}
-			// console.dir(
-			// 	{ selectors: standard },
-			// 	{ maxArrayLength: Infinity, maxStringLength: Infinity, depth: Infinity }
-			// );
 
 			for (const [fileName, asset] of Object.entries(assets)) {
 				const purgeCSSResult = await new PurgeCSS().purge({
@@ -120,11 +109,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				if (purgeCSSResult[0]) {
 					// prevent the original from being written
 					delete bundle[asset.fileName];
-
-					// console.dir(
-					// 	{ purge: purgeCSSResult[0] },
-					// 	{ maxArrayLength: Infinity, maxStringLength: Infinity, depth: Infinity }
-					// );
 
 					// emit the newly purged css file
 					this.emitFile({
