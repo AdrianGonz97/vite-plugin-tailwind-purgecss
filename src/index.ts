@@ -23,7 +23,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		'html',
 		'body',
 		/aria-current/,
-		/svelte-/,
 		// fix for pseudo-class functions that begin with `:` getting purged (e.g. `:is`)
 		// see: https://github.com/FullHuman/purgecss/issues/978
 		/^\:[-a-z]+$/,
@@ -102,7 +101,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 					safelist: {
 						...purgeOptions?.safelist,
 						standard,
-						greedy: [/svelte-/, ...(purgeOptions?.safelist?.greedy ?? [])],
+						greedy: [/svelte-/, /data-theme/, ...(purgeOptions?.safelist?.greedy ?? [])],
 					},
 				});
 
