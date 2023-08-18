@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.1.3
+
+### Patch Changes
+
+- ef556dd: fix: Added `data-theme` to the safelist
+
 ## 0.1.2
 
 ### Patch Changes
