@@ -1,0 +1,3 @@
+packages:
+  - 'packages/vite-plugin-tailwind-purgecss'
+  - 'packages/e2e/*'
