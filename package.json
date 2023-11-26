@@ -13,5 +13,8 @@
 		"type": "git"
 	},
 	"author": "AdrianGonz97",
-	"license": "MIT"
+	"license": "MIT",
+  "devDependencies": {
+		"@changesets/cli": "^2.26.2"
+	}
 }

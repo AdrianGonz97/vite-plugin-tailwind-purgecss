@@ -6,7 +6,11 @@ settings:
 
 importers:
 
-  .: {}
+  .:
+    devDependencies:
+      '@changesets/cli':
+        specifier: ^2.26.2
+        version: 2.26.2
 
   packages/e2e/vanilla-vite:
     devDependencies:
@@ -23,9 +27,6 @@ importers:
         specifier: 6.0.0-alpha.0
         version: 6.0.0-alpha.0
     devDependencies:
-      '@changesets/cli':
-        specifier: ^2.26.2
-        version: 2.26.2
       '@types/node':
         specifier: ^18.11.18
         version: 18.18.13
