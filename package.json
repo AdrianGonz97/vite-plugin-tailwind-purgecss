@@ -2,7 +2,7 @@
 	"name": "vite-plugin-tailwind-purgecss-monorepo",
   "private": true,
 	"scripts": {
-    "dev": "pnpm -r dev",
+    "dev": "pnpm -F vite-plugin-tailwind-purgecss dev",
 		"build": "pnpm -F vite-plugin-tailwind-purgecss build",
 		"lint": "pnpm -r lint",
 		"release": "pnpm run build && changeset publish",
