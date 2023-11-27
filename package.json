@@ -1,20 +1,21 @@
 {
-	"name": "vite-plugin-tailwind-purgecss-monorepo",
-  "private": true,
+	"name": "root",
+	"private": true,
+	"author": "AdrianGonz97",
+	"license": "MIT",
 	"scripts": {
-    "dev": "pnpm -F vite-plugin-tailwind-purgecss dev",
+		"dev": "pnpm -F vite-plugin-tailwind-purgecss dev",
+		"test": "pnpm -F vite-plugin-tailwind-purgecss test",
 		"build": "pnpm -F vite-plugin-tailwind-purgecss build",
 		"lint": "pnpm -r lint",
 		"release": "pnpm run build && changeset publish",
 		"format": "pnpm -r format"
-  },
-  "repository": {
+	},
+	"repository": {
 		"url": "https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss",
 		"type": "git"
 	},
-	"author": "AdrianGonz97",
-	"license": "MIT",
-  "devDependencies": {
+	"devDependencies": {
 		"@changesets/cli": "^2.26.2"
 	}
 }
