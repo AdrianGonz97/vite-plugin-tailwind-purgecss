@@ -96,8 +96,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 					...purgeOptions,
 					content: [join(viteConfig.root, '**/*.html'), ...(purgeOptions?.content ?? [])],
 					css: [{ raw: (asset.source as string).trim(), name: fileName }],
-					rejected: true,
-					rejectedCss: true,
 					safelist: {
 						...purgeOptions?.safelist,
 						standard,
