@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-tailwind-purgecss",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "Vite plugin for PurgeCSS",
 	"module": "dist/index.mjs",
 	"main": "dist/index.js",
@@ -21,7 +21,8 @@
 		"build": "tsup",
 		"lint": "tsc",
 		"release": "pnpm run build && changeset publish",
-		"format": "prettier --write \"./src/**/*.{ts,svelte}\""
+		"format": "prettier --write \"./src/**/*.{ts,svelte}\"",
+		"test": "vitest"
 	},
 	"keywords": [
 		"purgeCSS",
@@ -42,6 +43,7 @@
 	},
 	"devDependencies": {
 		"@types/node": "^18.11.18",
+		"postcss": "^8.4.31",
 		"prettier": "^2.8.1",
 		"tailwindcss": "^3.3.5",
 		"tsup": "^6.5.0",
@@ -53,6 +55,7 @@
 		"dist"
 	],
 	"peerDependencies": {
+		"postcss": "^8.4.31",
 		"tailwindcss": "^3.3.5",
 		"vite": "^4.1.1"
 	}

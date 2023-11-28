@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.1.4
+
+### Patch Changes
+
+- 74b3725: fix: Decreased plugin processing time by 80%
+
 ## 0.1.3
 
 ### Patch Changes
