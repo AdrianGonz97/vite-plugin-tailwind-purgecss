@@ -1,7 +1,6 @@
 import { PurgeCSS } from 'purgecss';
 import { defaultExtractor } from './extractors/default-extractor';
 import { walk } from 'estree-walker';
-import { join } from 'path';
 import type { ResolvedConfig, Plugin } from 'vite';
 import type { ComplexSafelist, StringRegExpArray, UserDefinedOptions } from 'purgecss';
 
@@ -91,7 +90,8 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			for (const [fileName, asset] of Object.entries(assets)) {
 				const purgeCSSResult = await new PurgeCSS().purge({
 					...purgeOptions,
-					content: [join(viteConfig.root, '**/*.html'), ...(purgeOptions?.content ?? [])],
+					// ideally, we'd pull the content from the TW config
+					content: ['./**/*.html', ...(purgeOptions?.content ?? [])],
 					css: [{ raw: (asset.source as string).trim(), name: fileName }],
 					safelist: {
 						...purgeOptions?.safelist,
