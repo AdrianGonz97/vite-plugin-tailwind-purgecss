@@ -4,15 +4,7 @@ import { walk } from 'estree-walker';
 import { join } from 'path';
 import type { ResolvedConfig, Plugin } from 'vite';
 import type { ComplexSafelist, StringRegExpArray, UserDefinedOptions } from 'purgecss';
-import loadConfig from 'tailwindcss/loadConfig';
-import resolveConfig from 'tailwindcss/resolveConfig';
-import defaultConfig from 'tailwindcss/defaultConfig.js';
 
-console.dir(defaultConfig, {
-	maxArrayLength: Infinity,
-	maxStringLength: Infinity,
-	depth: Infinity,
-});
 type Extractor = (content: string) => string[];
 
 type Options = Partial<UserDefinedOptions> & {
@@ -31,9 +23,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		'html',
 		'body',
 		/aria-current/,
-		// fix for pseudo-class functions that begin with `:` getting purged (e.g. `:is`)
-		// see: https://github.com/FullHuman/purgecss/issues/978
-		/^\:[-a-z]+$/,
 		...(purgeOptions?.safelist?.standard ?? []),
 	];
 	const extractor = (purgeOptions?.defaultExtractor as Extractor) ?? defaultExtractor();
