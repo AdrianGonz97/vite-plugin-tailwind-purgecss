@@ -46,7 +46,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		},
 
 		async generateBundle(options, bundle) {
-			type ChunkOrAsset = (typeof bundle)[string];
+			type ChunkOrAsset = typeof bundle[string];
 			type Asset = Extract<ChunkOrAsset, { type: 'asset' }>;
 			const assets: Record<string, Asset> = {};
 
