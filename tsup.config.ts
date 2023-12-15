@@ -5,7 +5,7 @@ export default defineConfig({
 	splitting: true,
 	sourcemap: true,
 	clean: true,
-	format: ['esm', 'cjs'],
+	format: ['esm'],
 	dts: true,
 	outDir: 'dist',
 	skipNodeModulesBundle: false,
