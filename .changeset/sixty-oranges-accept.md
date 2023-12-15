@@ -1,5 +1,5 @@
 ---
-'vite-plugin-tailwind-purgecss': patch
+'vite-plugin-tailwind-purgecss': minor
 ---
 
-Updated Peer Deps for Vite
+feat: Added support for Vite 5
