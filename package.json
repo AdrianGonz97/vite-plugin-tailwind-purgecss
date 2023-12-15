@@ -52,6 +52,6 @@
 		"dist"
 	],
 	"peerDependencies": {
-		"vite": "^4.1.1"
+		"vite": "^4.1.1 || ^5.0.0"
 	}
 }
