@@ -1,5 +1,5 @@
 import { PurgeCSS } from 'purgecss';
-import { defaultExtractor } from './extractors/default-extractor';
+import { defaultExtractor } from './extractors/default-extractor.js';
 import { walk } from 'estree-walker';
 import { join } from 'path';
 import type { ResolvedConfig, Plugin } from 'vite';
@@ -46,7 +46,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		},
 
 		async generateBundle(options, bundle) {
-			type ChunkOrAsset = typeof bundle[string];
+			type ChunkOrAsset = (typeof bundle)[string];
 			type Asset = Extract<ChunkOrAsset, { type: 'asset' }>;
 			const assets: Record<string, Asset> = {};
 
