@@ -1,5 +1,5 @@
 // Sourced from Tailwindcss
-import * as regex from './regex';
+import * as regex from './regex.js';
 
 export function defaultExtractor() {
 	let patterns = Array.from(buildRegExps());

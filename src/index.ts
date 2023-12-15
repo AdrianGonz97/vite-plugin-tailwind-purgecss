@@ -1,5 +1,5 @@
 import { PurgeCSS } from 'purgecss';
-import { defaultExtractor } from './extractors/default-extractor';
+import { defaultExtractor } from './extractors/default-extractor.js';
 import { walk } from 'estree-walker';
 import { join } from 'path';
 import type { ResolvedConfig, Plugin } from 'vite';
