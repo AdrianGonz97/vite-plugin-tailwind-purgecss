@@ -3,6 +3,9 @@
 [![npm version](https://img.shields.io/npm/v/vite-plugin-tailwind-purgecss?logo=npm&color=cb3837)](https://www.npmjs.com/package/vite-plugin-tailwind-purgecss)
 [![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/main/LICENSE)
 
+> [!IMPORTANT]
+> This plugin will no longer be necessary after the release of [Tailwind v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha) as they will introduce a new [Vite plugin](https://tailwindcss.com/blog/tailwindcss-v4-alpha#zero-configuration-content-detection) that will detect and generate the classes based on the module graph! As such, this plugin will only support Tailwind v3.
+
 A simple vite plugin that **thoroughly** purges excess CSS using [PurgeCSS](https://purgecss.com/). This package should be used in combination with [Tailwind](https://tailwindcss.com/) and a Tailwind UI component library such as [Skeleton](https://skeleton.dev) or [Flowbite](https://flowbite.com/).
 
 ## ⚠ Notice ⚠
