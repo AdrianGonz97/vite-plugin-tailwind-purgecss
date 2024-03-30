@@ -8,10 +8,6 @@
 
 A simple vite plugin that **thoroughly** purges excess CSS using [PurgeCSS](https://purgecss.com/). This package should be used in combination with [Tailwind](https://tailwindcss.com/) and a Tailwind UI component library such as [Skeleton](https://skeleton.dev) or [Flowbite](https://flowbite.com/).
 
-## ⚠ Notice ⚠
-
-This package is still very **experimental**. Breaking changes can occur at any time. We'll stabilize once we hit a `1.0.0` release.
-
 ## Motivation
 
 Tailwind UI component libraries are fantastic and are a joy to work with, but they come with an important caveat. The downside to them is that all of the Tailwind classes that are used in their provided components are _always_ generated, even if you don't import and use any of their components. This leads to a larger than necessary CSS bundle.
