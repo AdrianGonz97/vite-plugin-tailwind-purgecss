@@ -1,5 +1,12 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.2.1
+
+### Patch Changes
+
+- c4aeb76: chore: Upgraded to `purgecss` v6
+- c4aeb76: fix: Adjusted html content glob to account for Windows
+
 ## 0.2.0
 
 ### Minor Changes
