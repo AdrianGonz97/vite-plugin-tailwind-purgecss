@@ -1,6 +1,7 @@
 import { PurgeCSS } from 'purgecss';
 import { defaultExtractor } from './extractors/default-extractor.js';
 import { walk } from 'estree-walker';
+import path from 'node:path';
 import type { ResolvedConfig, Plugin } from 'vite';
 import type { ComplexSafelist, StringRegExpArray, UserDefinedOptions } from 'purgecss';
 
@@ -90,10 +91,12 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				standard.push(selector);
 			}
 
+			// normalize the glob path to use `/`
+			const htmlGlob = viteConfig.root.split(path.sep).join('/') + '/**/*.html';
 			for (const [fileName, asset] of Object.entries(assets)) {
 				const purgeCSSResult = await new PurgeCSS().purge({
 					...purgeOptions,
-					content: ['**/*.html', ...(purgeOptions?.content ?? [])],
+					content: [htmlGlob, ...(purgeOptions?.content ?? [])],
 					css: [{ raw: (asset.source as string).trim(), name: fileName }],
 					safelist: {
 						...purgeOptions?.safelist,
