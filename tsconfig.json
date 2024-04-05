@@ -4,11 +4,9 @@
 		"declaration": true,
 		"emitDeclarationOnly": true,
 		"esModuleInterop": true,
-		"downlevelIteration": true,
-		"lib": ["ESNext", "DOM.Iterable"],
-		"moduleResolution": "Node",
+		"moduleResolution": "NodeNext",
+		"module": "NodeNext",
 		"outDir": "dist",
-		"skipLibCheck": true,
 		"strict": true
 	},
 	"include": ["src/**/*"]
