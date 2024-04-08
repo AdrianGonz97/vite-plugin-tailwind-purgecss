@@ -44,7 +44,7 @@ export function resolveTailwindConfig(configPath?: string): TWConfig {
 	const resolvedConfigPath = resolveTailwindConfigPath(configPath);
 	if (resolvedConfigPath === null)
 		throw new Error(
-			'[vite-plugin-tailwind-purgecss]: Unable to find a tailwind config in the root of the project. Specify a path to the tailwind config in the plugin option `tailwindConfigPath`.'
+			'[vite-plugin-tailwind-purgecss]: Unable to find a tailwind config. Specify a path to the tailwind config in the plugin option `tailwindConfigPath`.'
 		);
 
 	const loadedConfig = loadConfig(resolvedConfigPath);
