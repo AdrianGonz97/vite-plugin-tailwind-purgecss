@@ -10,9 +10,13 @@ export type PurgeOptions = {
 	 */
 	tailwindConfigPath?: string;
 	/**
-	 * Enables `legacy` mode.
+	 * Enables `legacy` mode. (not recommended)
 	 *
-	 * Legacy mode purges everything, not just Tailwind classes.
+	 * Legacy mode brings back the old plugin behavior (`v0.3.0` and below) where all unused CSS is purged,
+	 * not just Tailwind classes. This mode is not recommended as it's too broad and can introduce
+	 * unexpected bugs that are difficult to find.
+	 *
+	 * **Use with caution!**
 	 * @default false
 	 */
 	legacy?: boolean;
