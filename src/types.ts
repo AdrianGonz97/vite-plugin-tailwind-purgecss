@@ -4,16 +4,15 @@ type Extractor = (content: string) => string[];
 
 export type PurgeOptions = {
 	/**
-	 * Path to your tailwind config.
+	 * Path to your tailwind config. Can be automatically detected if the config is located in the root of the project.
 	 *
-	 * Provide one if your config resides anywhere outside of the root.
+	 * Provide a path if your config resides anywhere outside of the root.
 	 */
 	tailwindConfigPath?: string;
 	/**
 	 * Enables `legacy` mode.
 	 *
-	 * Legacy mode purges everything, not just Tailwind classes. Use with caution.
-	 *
+	 * Legacy mode purges everything, not just Tailwind classes.
 	 * @default false
 	 */
 	legacy?: boolean;
@@ -24,6 +23,9 @@ export type PurgeOptions = {
 	 */
 	purgecss?: PurgeCSSOptions;
 	/**
+	 * A list of selectors that should be included in final CSS.
+	 *
+	 * **Note:** The safelist defined in your `tailwind.config.js` is already included.
 	 *
 	 * `legacy` must be set to `true` to enable.
 	 */
@@ -71,10 +73,6 @@ type PurgeCSSOptions = {
 	 * @default false
 	 */
 	variables?: boolean;
-	/** Outputs the purged CSS to a specified path. */
-	output?: string;
-	/** Ignores certain files or folders that would otherwise be scanned. */
-	skippedContentGlobs?: Array<string>;
 	/**
 	 * Option to add custom CSS attribute selectors like `aria-selected`, `data-selected`, etc.
 	 * @see https://github.com/FullHuman/purgecss/issues/588
