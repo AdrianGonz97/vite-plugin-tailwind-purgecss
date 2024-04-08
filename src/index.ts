@@ -37,13 +37,16 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 
 	// safelist from the tailwind config
 	const twSafelist = standardizeTWSafelist(tailwindConfig);
-	const standard: StringRegExpArray = [
-		// fix for pseudo-class functions that begin with `:` getting purged (e.g. `:is`)
-		// see: https://github.com/FullHuman/purgecss/issues/978
-		/^\:[-a-z]+$/,
-		...(purgeOptions?.safelist?.standard ?? []),
-		...twSafelist,
-	];
+	const safelist = {
+		...purgeOptions?.safelist,
+		standard: [
+			// fix for pseudo-class functions that begin with `:` getting purged (e.g. `:is`)
+			// see: https://github.com/FullHuman/purgecss/issues/978
+			/^\:[-a-z]+$/,
+			...(purgeOptions?.safelist?.standard ?? []),
+			...twSafelist,
+		],
+	};
 
 	const moduleIds = new Set<string>();
 	let isMatch: pm.Matcher;
@@ -91,10 +94,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				}
 
 				const purgecss = new PurgeCSS();
-				const safelist = {
-					...purgeOptions?.safelist,
-					standard,
-				};
 				purgecss.options = {
 					...defaultOptions,
 					...purgeOptions,
