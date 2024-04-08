@@ -2,7 +2,6 @@ import path from 'node:path';
 import fs from 'node:fs';
 import loadConfig from 'tailwindcss/loadConfig.js';
 import resolveConfig from 'tailwindcss/resolveConfig.js';
-import defaultConfig from 'tailwindcss/defaultConfig.js';
 import { defaultExtractor as createDefaultExtractor } from 'tailwindcss/lib/lib/defaultExtractor.js';
 import ctxPkg from 'tailwindcss/lib/lib/setupContextUtils.js';
 import type { Config as TWConfig } from 'tailwindcss';
@@ -43,7 +42,12 @@ function resolveTailwindConfigPath(configPath?: string): string | null {
 
 export function resolveTailwindConfig(configPath?: string): TWConfig {
 	const resolvedConfigPath = resolveTailwindConfigPath(configPath);
-	const loadedConfig = resolvedConfigPath !== null ? loadConfig(resolvedConfigPath) : defaultConfig;
+	if (resolvedConfigPath === null)
+		throw new Error(
+			'[vite-plugin-tailwind-purgecss]: Unable to find a tailwind config in the root of the project. Specify a path to the tailwind config in the plugin option `tailwindConfigPath`.'
+		);
+
+	const loadedConfig = loadConfig(resolvedConfigPath);
 	const config = resolveConfig(loadedConfig);
 
 	return config as TWConfig;
