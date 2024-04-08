@@ -1,7 +1,3 @@
-/**
- * TODOs:
- * - Calculate the before and after sizes of the purged stylesheets
- */
 import fs from 'node:fs';
 import path from 'node:path';
 import color from 'chalk';
@@ -18,8 +14,8 @@ import {
 	standardizeTWSafelist,
 } from './tailwind.js';
 import { log, createLogger } from './logger.js';
-import type { StringRegExpArray, ExtractorResultDetailed } from 'purgecss';
-import { type ResolvedConfig, type Plugin } from 'vite';
+import type { ExtractorResultDetailed } from 'purgecss';
+import type { ResolvedConfig, Plugin } from 'vite';
 import type { Node } from 'estree';
 import type { PurgeOptions } from './types.js';
 
