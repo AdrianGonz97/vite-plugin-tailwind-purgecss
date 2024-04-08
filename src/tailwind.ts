@@ -94,3 +94,27 @@ export function getContentPaths(config: ContentConfig): string[] {
 	}
 	return config.files.filter((p): p is string => typeof p === 'string');
 }
+
+export function standardizeTWSafelist(tailwindConfig: TWConfig): (string | RegExp)[] {
+	return (
+		tailwindConfig.safelist?.flatMap((item) => {
+			if (typeof item === 'string') {
+				return item;
+			}
+			const { pattern, variants } = item;
+			if (variants === undefined) return pattern;
+
+			const flags = pattern.flags;
+			const stringifiedPattern = pattern
+				.toString()
+				// remove the flags
+				.slice(0, flags.length * -1)
+				// removes the starting and ending `/`
+				.slice(1, -1);
+			const patterns = variants.map(
+				(v) => new RegExp(v + tailwindConfig.separator + stringifiedPattern, flags)
+			);
+			return patterns;
+		}) ?? []
+	);
+}
