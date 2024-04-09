@@ -10,12 +10,12 @@ A simple vite plugin that purges excess Tailwind CSS classes. This package shoul
 
 ## Motivation
 
+> [!NOTE]
+> This plugin will no longer be necessary after the release of [Tailwind v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha) as they'll introduce a new [Vite plugin](https://tailwindcss.com/blog/tailwindcss-v4-alpha#zero-configuration-content-detection) that will detect and generate the classes based on the module graph! As such, this plugin will only support Tailwind v3.
+
 Tailwind UI component libraries are fantastic and a joy to work with, but they come with an important caveat. The downside to them is that all of the Tailwind classes that are used in their provided components are _always_ generated, **even if you don't import and use any of their components**. This leads to a larger than necessary CSS bundle.
 
 This is a limitation of how Tailwind works with the `content` field in it's config. Tailwind searches through all of the files that are specified in `content`, uses a regex to find any possible selectors, and generates their respective classes. There's no treeshaking and no purging involved.
-
-> [!NOTE]
-> This plugin will no longer be necessary after the release of [Tailwind v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha) as they'll introduce a new [Vite plugin](https://tailwindcss.com/blog/tailwindcss-v4-alpha#zero-configuration-content-detection) that will detect and generate the classes based on the module graph! As such, this plugin will only support Tailwind v3.
 
 ## Why not use `postcss-purgecss` or `rollup-plugin-purgecss`?
 
