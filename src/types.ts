@@ -4,7 +4,8 @@ type Extractor = (content: string) => string[];
 
 export type PurgeOptions = {
 	/**
-	 * Path to your tailwind config. Can be automatically detected if the config is located in the root of the project.
+	 * Path to your tailwind config. This can normally be automatically detected if the config
+	 * is located in the root of the project.
 	 *
 	 * Provide a path if your config resides anywhere outside of the root.
 	 */
@@ -12,9 +13,9 @@ export type PurgeOptions = {
 	/**
 	 * Enables `legacy` mode. (not recommended)
 	 *
-	 * Legacy mode brings back the old plugin behavior (`v0.3.0` and below) where all unused CSS is purged,
+	 * Legacy mode brings back the old plugin behavior (`v0.2.1` and below) where all unused CSS is purged,
 	 * not just Tailwind classes. This mode is not recommended as it's too broad and can introduce
-	 * unexpected bugs that are difficult to find.
+	 * unexpected bugs.
 	 *
 	 * **Use with caution!**
 	 * @default false

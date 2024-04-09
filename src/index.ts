@@ -208,7 +208,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			htmlSelectors.classes.forEach((cn) => generatedTWClasses.delete(cn));
 
 			// the remaining classes in `generatedTWClasses` are _unused_,
-			// so we'll add it to the blocklist to forcefully purge
+			// so we'll add it to the blocklist to forcefully purge them
 			purgecss.options.blocklist.push(...generatedTWClasses, ...(tailwindConfig.blocklist ?? []));
 			if (LEGACY) purgecss.options.safelist.standard.push(...possibleSelectors);
 
