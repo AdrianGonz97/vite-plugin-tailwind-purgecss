@@ -4,22 +4,18 @@
 [![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/main/LICENSE)
 
 > [!IMPORTANT]
-> As of `v0.2.1`, `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes are more conservative and focused approach, only purging **unused tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
+> As of `v0.3.0`, `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes are more conservative and focused approach, only purging unused **tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
 
-A simple vite plugin that purges excess Tailwind CSS classes. This package should be used in combination with [TailwindCSS](https://tailwindcss.com/) and a Tailwind UI component library, such as [Skeleton](https://skeleton.dev), [Flowbite](https://flowbite.com/) or even [shadcn-ui](https://ui.shadcn.com/) (and it's [many ports](https://shadcn-svelte.com/)).
+A simple vite plugin that purges excess Tailwind CSS classes. This plugin should be used in combination with [TailwindCSS](https://tailwindcss.com/) and a Tailwind UI component library, such as [Skeleton](https://skeleton.dev), [Flowbite](https://flowbite.com/) or even [shadcn-ui](https://ui.shadcn.com/) (and it's [many ports](https://shadcn-svelte.com/)).
 
 ## Motivation
 
 > [!NOTE]
-> This plugin will no longer be necessary after the release of [Tailwind v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha) as they'll introduce a new [Vite plugin](https://tailwindcss.com/blog/tailwindcss-v4-alpha#zero-configuration-content-detection) that will detect and generate the classes based on the module graph! As such, this plugin will only support Tailwind v3.
+> This plugin will no longer be necessary after the release of [Tailwind v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha) as they are introducing a new [Vite plugin](https://tailwindcss.com/blog/tailwindcss-v4-alpha#zero-configuration-content-detection) that will detect and generate the tailwind classes based on the module graph! As such, this plugin will only support Tailwind v3.
 
 Tailwind UI component libraries are fantastic and a joy to work with, but they come with an important caveat. The downside to them is that all of the Tailwind classes that are used in their provided components are _always_ generated, **even if you don't import and use any of their components**. This leads to a larger than necessary CSS bundle.
 
 This is a limitation of how Tailwind works with the `content` field in it's config. Tailwind searches through all of the files that are specified in `content`, uses a regex to find any possible selectors, and generates their respective classes. There's no treeshaking and no purging involved.
-
-## Why not use `postcss-purgecss` or `rollup-plugin-purgecss`?
-
-PurgeCSS provides a suite of plugins that do a well enough job for _most_ projects. However, plugins such as [postcss-purgecss](https://github.com/FullHuman/purgecss/tree/main/packages/postcss-purgecss) and [rollup-plugin-purgecss](https://github.com/FullHuman/purgecss/tree/main/packages/rollup-plugin-purgecss) take a rather naive approach to selector extraction. Similar to how Tailwind generates its classes, they _only_ analyze the files that are passed to them through their `content` fields, which means that if you pass a UI library to it, none of the selectors that are **unused** in _your project_ will be properly purged.
 
 ## How it works
 
@@ -59,7 +55,7 @@ const config: UserConfig = {
 ...and you're all set!
 
 <details>
-	<summary><h3>Plugin Config Options</h3></summary>
+	<summary><h2>Plugin Config Options</h2></summary>
 
 ```ts
 export type PurgeOptions = {
@@ -106,3 +102,9 @@ export type PurgeOptions = {
 ```
 
 </details>
+
+## FAQ
+
+### Why not use `postcss-purgecss` or `rollup-plugin-purgecss`?
+
+PurgeCSS provides a suite of plugins that do a well enough job for _most_ projects. However, plugins such as [postcss-purgecss](https://github.com/FullHuman/purgecss/tree/main/packages/postcss-purgecss) and [rollup-plugin-purgecss](https://github.com/FullHuman/purgecss/tree/main/packages/rollup-plugin-purgecss) take a rather naive approach to selector extraction. Similar to how Tailwind generates its classes, they _only_ analyze the files that are passed to them through their `content` fields, which means that if you pass an entire UI library to it, none of the selectors that are **unused** in _your project_ will be properly purged.
