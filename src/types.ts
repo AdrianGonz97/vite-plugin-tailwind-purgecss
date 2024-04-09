@@ -34,7 +34,12 @@ export type PurgeOptions = {
 	 * `legacy` must be set to `true` to enable.
 	 */
 	safelist?: ComplexSafelist;
-	/** @default false */
+	/**
+	 * Enables `debug` mode.
+	 *
+	 * Incurs a large performance cost, dramatically slowing down build times.
+	 * @default false
+	 */
 	debug?: boolean;
 } & (
 	| {
