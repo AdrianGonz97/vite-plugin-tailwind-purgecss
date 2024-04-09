@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import fg from 'fast-glob';
 import color from 'chalk';
 import * as css from 'css-tree';
-import pm from 'picomatch';
 import * as estree from 'estree-walker';
-import { PurgeCSS, mergeExtractorSelectors, standardizeSafelist, defaultOptions } from 'purgecss';
 import htmlExtractor from 'purgecss-from-html';
+import { PurgeCSS, mergeExtractorSelectors, standardizeSafelist, defaultOptions } from 'purgecss';
 import {
 	resolveTailwindConfig,
 	defaultExtractor,
@@ -20,6 +20,9 @@ import type { Node } from 'estree';
 import type { PurgeOptions } from './types.js';
 
 const EXT_CSS = /\.(css)$/;
+// cache
+const files = new Set<string>();
+const htmlFiles: string[] = [];
 
 export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	const DEBUG = purgeOptions?.debug ?? false;
@@ -45,7 +48,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	};
 
 	const moduleIds = new Set<string>();
-	let isMatch: pm.Matcher;
 
 	return {
 		name: 'vite-plugin-tailwind-purgecss',
@@ -53,10 +55,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		enforce: 'post',
 
 		load(id) {
-			const filepath = path.relative(viteConfig.root, id);
-			// matches on the relative path if it doesn't require moving up a parent directory,
-			// otherwise it matches on the absolute path
-			if (!isMatch(filepath.startsWith('..') ? id : filepath)) return;
+			if (!files.has(id)) return;
 			// module is included in tailwind's `content` field
 			moduleIds.add(id);
 		},
@@ -65,12 +64,14 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			viteConfig = config;
 			createLogger(viteConfig);
 
-			const contentGlobs = getContentPaths(tailwindConfig.content);
-			isMatch = pm(contentGlobs, {
-				cwd: viteConfig.root,
-				posixSlashes: true,
-				literalBrackets: true,
-			});
+			// if the files haven't been cached
+			if (files.size === 0) {
+				const contentGlobs = getContentPaths(tailwindConfig.content);
+				for (const file of fg.globSync(contentGlobs, { cwd: viteConfig.root, absolute: true })) {
+					if (file.endsWith('.html')) htmlFiles.push(file);
+					files.add(file);
+				}
+			}
 		},
 
 		generateBundle: {
@@ -171,15 +172,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 					}
 				}
 
-				const htmlSelectors = await new PurgeCSS().extractSelectorsFromFiles(
-					['./**/*.html'],
-					[
-						// @ts-expect-error extractor types aren't matching for some reason
-						{ extractor: htmlExtractor, extensions: ['html'] },
-					]
-				);
-
-				const foundTWClasses = new Set<string>();
+				// not TW classes, but are possibly a selector (used for legacy mode)
 				const possibleSelectors = new Set<string>();
 				for (const mod of includedModules) {
 					if (mod.extension !== 'js') continue;
@@ -190,25 +183,30 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 							if (node.type === 'Literal' && typeof node.value === 'string') {
 								const value = node.value;
 								for (const selector of extractor(value)) {
-									if (generatedTWClasses.delete(selector)) foundTWClasses.add(selector);
-									else possibleSelectors.add(selector);
+									if (!generatedTWClasses.delete(selector)) possibleSelectors.add(selector);
 								}
 							}
 							if (node.type === 'TemplateElement') {
 								const value = node.value.cooked ?? node.value.raw;
 								for (const selector of extractor(value)) {
-									if (generatedTWClasses.delete(selector)) foundTWClasses.add(selector);
-									else possibleSelectors.add(selector);
+									if (!generatedTWClasses.delete(selector)) possibleSelectors.add(selector);
 								}
 							}
 							if (node.type === 'Identifier') {
 								const selector = node.name;
-								if (generatedTWClasses.delete(selector)) foundTWClasses.add(selector);
-								else possibleSelectors.add(selector);
+								if (!generatedTWClasses.delete(selector)) possibleSelectors.add(selector);
 							}
 						},
 					});
 				}
+
+				const htmlSelectors = await purgecss.extractSelectorsFromFiles(htmlFiles, [
+					// @ts-expect-error extractor types aren't matching for some reason
+					{ extractor: htmlExtractor, extensions: ['html'] },
+				]);
+
+				// @ts-expect-error `classes` is private, but we need it
+				htmlSelectors.classes.forEach((cn) => generatedTWClasses.delete(cn));
 
 				// the remaining classes in `generatedTWClasses` are _unused_,
 				// so we'll add it to the blocklist to forcefully purge
@@ -229,6 +227,18 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				);
 
 				const purgeResults = await purgecss.getPurgedCSS(includedAssets, mergedSelectors);
+
+				if (DEBUG) {
+					log.info('Currently in DEBUG mode');
+					console.dir(
+						{
+							possible_selectors: mergedSelectors,
+							tailwind_classes_to_remove: generatedTWClasses,
+							purgecss_results: purgeResults,
+						},
+						{ maxArrayLength: Infinity, maxStringLength: Infinity, depth: Infinity }
+					);
+				}
 
 				const stats = [];
 				for (const result of purgeResults) {
@@ -276,8 +286,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	};
 }
 
-export default purgeCss;
-
 function unescapeCSS(str: string, options = { slashZero: true }) {
 	const string = options?.slashZero ? str.replaceAll('�', '\0') : str;
 	return string.replaceAll(/\\([\dA-Fa-f]{1,6}[\t\n\f\r ]?|[\S\s])/g, (match) => {
@@ -286,3 +294,5 @@ function unescapeCSS(str: string, options = { slashZero: true }) {
 			: match[1];
 	});
 }
+
+export default purgeCss;
