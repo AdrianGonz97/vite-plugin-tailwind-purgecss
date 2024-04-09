@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/main/LICENSE)
 
 > [!IMPORTANT]
-> As of `v0.3.0`, `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes are more conservative and focused approach, only purging unused **tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
+> As of `v0.3.0`, `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes a more conservative and focused approach, only purging unused **tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
 
 A simple vite plugin that purges excess Tailwind CSS classes. This plugin should be used in combination with [TailwindCSS](https://tailwindcss.com/) and a Tailwind UI component library, such as [Skeleton](https://skeleton.dev), [Flowbite](https://flowbite.com/) or even [shadcn-ui](https://ui.shadcn.com/) (and it's [many ports](https://shadcn-svelte.com/)).
 
@@ -13,13 +13,13 @@ A simple vite plugin that purges excess Tailwind CSS classes. This plugin should
 > [!NOTE]
 > This plugin will no longer be necessary after the release of [Tailwind v4](https://tailwindcss.com/blog/tailwindcss-v4-alpha) as they are introducing a new [Vite plugin](https://tailwindcss.com/blog/tailwindcss-v4-alpha#zero-configuration-content-detection) that will detect and generate the tailwind classes based on the module graph! As such, this plugin will only support Tailwind v3.
 
-Tailwind UI component libraries are fantastic and a joy to work with, but they come with an important caveat. The downside to them is that all of the Tailwind classes that are used in their provided components are _always_ generated, **even if you don't import and use any of their components**. This leads to a larger than necessary CSS bundle.
+Tailwind UI component libraries are fantastic and a joy to work with, but they come with an important caveat. The downside to them is that all of the Tailwind classes that are used in **their provided components** are _always_ generated, **even if you don't import and use any of them**. This leads to a larger than necessary CSS bundle.
 
-This is a limitation of how Tailwind works with the `content` field in it's config. Tailwind searches through all of the files that are specified in `content`, uses a regex to find any possible selectors, and generates their respective classes. There's no treeshaking and no purging involved.
+This is a limitation of how Tailwind works with the config's `content` field. Tailwind searches through all of the files that are specified in `content`, uses a regex to find any possible selectors, and generates their respective classes. There's no treeshaking and no purging involved.
 
 ## How it works
 
-Ideally, we'd only want to keep the tailwind classes that are being used in your project. We accomplish this by analyzing the files in the module graph and extracting out any of their possible selectors. From there, we pass along the selectors to PurgeCSS for final processing.
+Ideally, we only want to keep the tailwind classes that are being used in your project. We accomplish this by analyzing the files in the module graph and extracting out any of their possible selectors. From there, we pass along the selectors to PurgeCSS for final processing.
 
 Using `vite-plugin-tailwind-purgecss` with [Skeleton](https://skeleton.dev), we're able to reduce the CSS bundle size of Skeleton's [Barebones Template](https://github.com/skeletonlabs/skeleton-template-bare) from:
 
