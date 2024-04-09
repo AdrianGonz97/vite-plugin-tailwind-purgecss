@@ -293,3 +293,4 @@ function unescapeCSS(str: string, options = { slashZero: true }) {
 }
 
 export default purgeCss;
+export type { PurgeOptions };
