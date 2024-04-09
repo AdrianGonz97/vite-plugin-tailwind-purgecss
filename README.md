@@ -4,7 +4,7 @@
 [![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/main/LICENSE)
 
 > [!IMPORTANT]
-> As of `v0.3.0`, `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes a more conservative and focused approach, only purging unused **tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
+> As of [`v0.3.0`](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/pull/27), `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes a more conservative and focused approach, only purging unused **tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
 
 A simple vite plugin that purges excess Tailwind CSS classes. This plugin should be used in combination with [TailwindCSS](https://tailwindcss.com/) and a Tailwind UI component library, such as [Skeleton](https://skeleton.dev), [Flowbite](https://flowbite.com/) or even [shadcn-ui](https://ui.shadcn.com/) (and it's [many ports](https://shadcn-svelte.com/)).
 
