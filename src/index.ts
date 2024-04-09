@@ -82,8 +82,9 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			const extensions = new Set<string>();
 
 			log.clear();
+			if (DEBUG) log.info(`${color.greenBright('DEBUG mode activated')}.`);
 			if (LEGACY) {
-				log.info(`Using ${color.yellowBright('legacy mode')}. Purging all unused CSS...`);
+				log.info(`${color.yellowBright('LEGACY mode activated')}. Purging all unused CSS...`);
 			} else {
 				log.info('Purging unused tailwindcss styles...');
 			}
@@ -227,7 +228,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			const purgeResults = await purgecss.getPurgedCSS(includedAssets, mergedSelectors);
 
 			if (DEBUG) {
-				log.info(`Currently in ${color.greenBright('DEBUG mode')}`);
 				console.dir(
 					{
 						possible_selectors: mergedSelectors,
