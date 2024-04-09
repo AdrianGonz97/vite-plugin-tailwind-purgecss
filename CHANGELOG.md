@@ -1,5 +1,15 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.3.0
+
+### Minor Changes
+
+- 0f75105: breaking: Updated the default purging strategy to only target Tailwind specific classes
+- 0f75105: feat: Bundle size differences are now printed during build
+- 0f75105: feat: Added `legacy` mode that brings back the old plugin behavior
+- 0f75105: breaking: Updated plugin option types
+- 0f75105: breaking: Added `tailwindcss` (v3.3.0 or higher) as a peer-dependency
+
 ## 0.2.1
 
 ### Patch Changes
