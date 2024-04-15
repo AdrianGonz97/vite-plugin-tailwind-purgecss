@@ -5,6 +5,7 @@ import color from 'chalk';
 import * as css from 'css-tree';
 import * as estree from 'estree-walker';
 import htmlExtractor from 'purgecss-from-html';
+import { normalizePath, type ResolvedConfig, type Plugin } from 'vite';
 import { PurgeCSS, mergeExtractorSelectors, standardizeSafelist, defaultOptions } from 'purgecss';
 import {
 	resolveTailwindConfig,
@@ -15,7 +16,6 @@ import {
 } from './tailwind.js';
 import { log, createLogger } from './logger.js';
 import type { ExtractorResultDetailed } from 'purgecss';
-import type { ResolvedConfig, Plugin } from 'vite';
 import type { Node } from 'estree';
 import type { PurgeOptions } from './types.js';
 
@@ -66,7 +66,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 
 			// if the files haven't been cached
 			if (files.size === 0) {
-				const contentGlobs = getContentPaths(tailwindConfig.content);
+				const contentGlobs = getContentPaths(tailwindConfig.content).map((p) => normalizePath(p));
 				for (const file of fg.globSync(contentGlobs, { cwd: viteConfig.root, absolute: true })) {
 					if (file.endsWith('.html')) htmlFiles.push(file);
 					files.add(file);

@@ -13,7 +13,7 @@ export function createLogger(viteConfig: ResolvedConfig) {
 		clear: () => viteConfig.logger.clearScreen('info'),
 		colorFile: (filepath: string) => {
 			const fp = path.parse(filepath);
-			const colored = color.gray(fp.dir + path.sep) + fp.base;
+			const colored = color.gray(fp.dir + '/') + fp.base;
 			return colored;
 		},
 	};
