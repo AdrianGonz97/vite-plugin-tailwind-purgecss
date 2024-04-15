@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.3.1
+
+### Patch Changes
+
+- baeec98: fix: Normalize content glob paths for Windows
+
 ## 0.3.0
 
 ### Minor Changes
