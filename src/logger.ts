@@ -2,7 +2,7 @@ import color from 'chalk';
 import path from 'node:path';
 import type { ResolvedConfig } from 'vite';
 
-export let log: ReturnType<typeof createLogger>;
+export type Logger = ReturnType<typeof createLogger>;
 
 export function createLogger(viteConfig: ResolvedConfig) {
 	const PREFIX = color.cyan('[vite-plugin-tailwind-purgecss]: ');
@@ -17,8 +17,6 @@ export function createLogger(viteConfig: ResolvedConfig) {
 			return colored;
 		},
 	};
-
-	log = logger;
 
 	return logger;
 }
