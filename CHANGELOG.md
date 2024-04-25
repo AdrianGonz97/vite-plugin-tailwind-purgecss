@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.3.2
+
+### Patch Changes
+
+- a248a67: fix: SSR builds no longer interfere with client builds
+
 ## 0.3.1
 
 ### Patch Changes
