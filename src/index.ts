@@ -161,7 +161,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 
 				// compiled JS code
 				const source = fs.readFileSync(id, { encoding: 'utf8' });
-				includedModules.push({ raw: source, extension: 'tw' });
+				includedModules.push({ raw: source, extension: 'tw' }, { raw: info.code, extension: 'tw' });
 
 				if (LEGACY) {
 					// plucks out the `.` (e.g. `.html` -> `html`)
