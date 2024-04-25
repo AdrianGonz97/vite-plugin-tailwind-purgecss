@@ -11,9 +11,6 @@ dependencies:
   css-tree:
     specifier: ^2.3.1
     version: 2.3.1
-  estree-walker:
-    specifier: ^3.0.3
-    version: 3.0.3
   fast-glob:
     specifier: ^3.3.2
     version: 3.3.2
@@ -31,9 +28,6 @@ devDependencies:
   '@types/css-tree':
     specifier: ^2.3.7
     version: 2.3.7
-  '@types/estree':
-    specifier: ^1.0.5
-    version: 1.0.5
   '@types/node':
     specifier: ^18.11.18
     version: 18.11.18
@@ -710,6 +704,7 @@ packages:
 
   /@types/estree@1.0.5:
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+    dev: true
 
   /@types/is-ci@3.0.0:
     resolution: {integrity: sha512-Q0Op0hdWbYd1iahB+IFNQcWXFq4O0Q5MwQP7uN0souuQ4rPg1vEYcnIOfr1gY+M+6rc8FGoRaBO1mOOvL29sEQ==}
@@ -1467,12 +1462,6 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dev: true
-
-  /estree-walker@3.0.3:
-    resolution: {integrity: sha512-7RUKfXgSMMkzt6ZuXmqapOurLGPPfgj6l9uRZ7lRGolvk0y2yocc35LdcxKC5PQZdn2DMqioAQ2NoWcrTKmm6g==}
-    dependencies:
-      '@types/estree': 1.0.5
-    dev: false
 
   /execa@5.1.1:
     resolution: {integrity: sha512-8uSpZZocAZRBAPIEINJj3Lo9HyGitllczc27Eh5YYojjMFMn8yHMDMaUHE2Jqfq05D/wucwI4JGURyXt1vchyg==}
