@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.3.3
+
+### Patch Changes
+
+- d3835bf: fix: Extract selectors from compiled modules
+
 ## 0.3.2
 
 ### Patch Changes
