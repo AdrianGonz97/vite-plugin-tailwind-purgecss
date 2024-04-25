@@ -2,4 +2,4 @@
 'vite-plugin-tailwind-purgecss': patch
 ---
 
-fix: SSR bundles no longer interfere with client bundles
+fix: SSR builds no longer interfere with client builds
