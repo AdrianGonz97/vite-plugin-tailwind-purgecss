@@ -39,7 +39,6 @@
 	"dependencies": {
 		"chalk": "^5.3.0",
 		"css-tree": "^2.3.1",
-		"estree-walker": "^3.0.3",
 		"fast-glob": "^3.3.2",
 		"purgecss": "^6.0.0",
 		"purgecss-from-html": "^6.0.0"
@@ -47,7 +46,6 @@
 	"devDependencies": {
 		"@changesets/cli": "^2.26.2",
 		"@types/css-tree": "^2.3.7",
-		"@types/estree": "^1.0.5",
 		"@types/node": "^18.11.18",
 		"prettier": "^2.8.1",
 		"tailwindcss": "^3.3.5",

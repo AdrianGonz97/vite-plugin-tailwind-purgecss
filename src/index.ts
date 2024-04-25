@@ -3,10 +3,9 @@ import path from 'node:path';
 import fg from 'fast-glob';
 import color from 'chalk';
 import * as css from 'css-tree';
-import * as estree from 'estree-walker';
 import htmlExtractor from 'purgecss-from-html';
 import { normalizePath, type ResolvedConfig, type Plugin } from 'vite';
-import { PurgeCSS, mergeExtractorSelectors, standardizeSafelist, defaultOptions } from 'purgecss';
+import { PurgeCSS, mergeExtractorSelectors, standardizeSafelist } from 'purgecss';
 import {
 	resolveTailwindConfig,
 	defaultExtractor,
@@ -14,20 +13,21 @@ import {
 	getTailwindClasses,
 	standardizeTWSafelist,
 } from './tailwind.js';
-import { log, createLogger } from './logger.js';
+import { createLogger, type Logger } from './logger.js';
+import { getDefaultPurgeOptions } from './purgecss-options.js';
 import type { ExtractorResultDetailed } from 'purgecss';
-import type { Node } from 'estree';
 import type { PurgeOptions } from './types.js';
 
 const EXT_CSS = /\.(css)$/;
 // cache
-const files = new Set<string>();
+const contentFiles = new Set<string>();
 const htmlFiles: string[] = [];
 
 export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 	const DEBUG = purgeOptions?.debug ?? false;
 	const LEGACY = purgeOptions?.legacy ?? false;
 
+	let log: Logger;
 	let viteConfig: ResolvedConfig;
 
 	const tailwindConfig = resolveTailwindConfig(purgeOptions?.tailwindConfigPath);
@@ -54,24 +54,24 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 		apply: 'build',
 		enforce: 'post',
 
-		load(id) {
-			if (!files.has(id)) return;
-			// module is included in tailwind's `content` field
-			moduleIds.add(id);
-		},
-
 		configResolved(config) {
 			viteConfig = config;
-			createLogger(viteConfig);
+			log = createLogger(viteConfig);
 
-			// if the files haven't been cached
-			if (files.size === 0) {
+			// if the content files haven't been cached
+			if (contentFiles.size === 0) {
 				const contentGlobs = getContentPaths(tailwindConfig.content).map((p) => normalizePath(p));
 				for (const file of fg.globSync(contentGlobs, { cwd: viteConfig.root, absolute: true })) {
 					if (file.endsWith('.html')) htmlFiles.push(file);
-					files.add(file);
+					contentFiles.add(file);
 				}
 			}
+		},
+
+		load(id) {
+			if (!contentFiles.has(id)) return;
+			// module is included in tailwind's `content` field
+			moduleIds.add(id);
 		},
 
 		async generateBundle(options, bundle) {
@@ -80,6 +80,9 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			const includedModules: Array<{ raw: string; extension: string }> = [];
 			const includedAssets: Array<{ raw: string; name: string }> = [];
 			const extensions = new Set<string>();
+
+			const savedTWClasses = new Set<string>();
+			const generatedTWClasses = new Set<string>();
 
 			log.clear();
 			if (DEBUG) log.info(`${color.greenBright('DEBUG mode activated')}.`);
@@ -91,14 +94,13 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 
 			const purgecss = new PurgeCSS();
 			purgecss.options = {
-				...defaultOptions,
-				...purgeOptions,
+				...getDefaultPurgeOptions(),
+				defaultExtractor: extractor,
 				safelist: standardizeSafelist(safelist),
 				rejected: DEBUG,
 				rejectedCss: DEBUG,
 			};
 
-			const generatedTWClasses = new Set<string>();
 			// a list of selectors found in the original stylesheets
 			const baseSelectors: ExtractorResultDetailed = {
 				attributes: { names: [], values: [] },
@@ -145,7 +147,6 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 								baseSelectors.classes.push(escapedCN);
 								if (tw.isClass(escapedCN)) {
 									generatedTWClasses.add(escapedCN);
-									return;
 								}
 							}
 						},
@@ -159,14 +160,14 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				if (info?.isIncluded !== true || info.code === null) continue;
 
 				// compiled JS code
-				includedModules.push({ raw: info.code, extension: 'js' });
+				const source = fs.readFileSync(id, { encoding: 'utf8' });
+				includedModules.push({ raw: source, extension: 'tw' });
 
 				if (LEGACY) {
 					// plucks out the `.` (e.g. `.html` -> `html`)
 					const extension = path.parse(id).ext.slice(1);
 					extensions.add(extension);
 					// source code
-					const source = fs.readFileSync(id, { encoding: 'utf8' });
 					includedModules.push({ raw: source, extension });
 				}
 			}
@@ -174,29 +175,15 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			// not TW classes, but are possibly a selector (used for legacy mode)
 			const possibleSelectors = new Set<string>();
 			for (const mod of includedModules) {
-				if (mod.extension !== 'js') continue;
-				const ast = this.parse(mod.raw) as Node;
+				if (mod.extension !== 'tw') continue;
 
-				estree.walk(ast, {
-					enter(node) {
-						if (node.type === 'Literal' && typeof node.value === 'string') {
-							const value = node.value;
-							for (const selector of extractor(value)) {
-								if (!generatedTWClasses.delete(selector)) possibleSelectors.add(selector);
-							}
-						}
-						if (node.type === 'TemplateElement') {
-							const value = node.value.cooked ?? node.value.raw;
-							for (const selector of extractor(value)) {
-								if (!generatedTWClasses.delete(selector)) possibleSelectors.add(selector);
-							}
-						}
-						if (node.type === 'Identifier') {
-							const selector = node.name;
-							if (!generatedTWClasses.delete(selector)) possibleSelectors.add(selector);
-						}
-					},
-				});
+				for (const selector of extractor(mod.raw)) {
+					if (generatedTWClasses.delete(selector)) {
+						savedTWClasses.add(selector);
+					} else {
+						possibleSelectors.add(selector);
+					}
+				}
 			}
 
 			const htmlSelectors = await purgecss.extractSelectorsFromFiles(htmlFiles, [
@@ -213,7 +200,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 			if (LEGACY) purgecss.options.safelist.standard.push(...possibleSelectors);
 
 			// excludes `js` files as they are handled separately above
-			extensions.delete('js');
+			extensions.delete('tw');
 			const moduleSelectors = await purgecss.extractSelectorsFromString(includedModules, [
 				{ extractor, extensions: Array.from(extensions) },
 				...(purgeOptions?.purgecss?.extractors ?? []),
@@ -225,6 +212,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 				baseSelectors
 			);
 
+			// purge the stylesheets
 			const purgeResults = await purgecss.getPurgedCSS(includedAssets, mergedSelectors);
 
 			if (DEBUG) {
@@ -232,6 +220,7 @@ export function purgeCss(purgeOptions?: PurgeOptions): Plugin {
 					{
 						possible_selectors: mergedSelectors,
 						tailwind_classes_to_remove: generatedTWClasses,
+						tailwind_classes_to_keep: savedTWClasses,
 						purgecss_results: purgeResults,
 					},
 					{ maxArrayLength: Infinity, maxStringLength: Infinity, depth: Infinity }
