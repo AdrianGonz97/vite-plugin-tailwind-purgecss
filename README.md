@@ -1,7 +1,8 @@
 # vite-plugin-tailwind-purgecss
 
-[![npm version](https://img.shields.io/npm/v/vite-plugin-tailwind-purgecss?logo=npm&color=cb3837)](https://www.npmjs.com/package/vite-plugin-tailwind-purgecss)
-[![license](https://img.shields.io/badge/license-MIT-%23bada55)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/main/LICENSE)
+[![npm version](https://flat.badgen.net/npm/v/vite-plugin-tailwind-purgecss?color=red)](https://npmjs.com/package/vite-plugin-tailwind-purgecss)
+[![npm downloads](https://flat.badgen.net/npm/dm/vite-plugin-tailwind-purgecss?color=red)](https://npmjs.com/package/vite-plugin-tailwind-purgecss)
+[![license](https://flat.badgen.net/github/license/AdrianGonz97/vite-plugin-tailwind-purgecss?color=red)](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/blob/master/LICENSE)
 
 > [!IMPORTANT]
 > As of [`v0.3.0`](https://github.com/AdrianGonz97/vite-plugin-tailwind-purgecss/pull/27), `vite-plugin-tailwind-purgecss` no longer purges **all** unused CSS. Instead, it takes a more conservative and focused approach, only purging unused **tailwindcss classes**. The previous purging strategy introduced too many bugs and reached far outside of its intended scope. If you wish to reenable the old behavior, see [legacy mode](/legacy-mode.md).
