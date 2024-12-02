@@ -1,6 +1,6 @@
 {
 	"name": "vite-plugin-tailwind-purgecss",
-	"version": "0.3.3",
+	"version": "0.3.5",
 	"description": "Vite plugin for PurgeCSS",
 	"module": "dist/index.js",
 	"main": "dist/index.js",
@@ -58,6 +58,6 @@
 	],
 	"peerDependencies": {
 		"tailwindcss": "^3.3.0",
-		"vite": "^4.1.1 || ^5.0.0"
+		"vite": "^4.1.1 || ^5.0.0 || ^6.0.0"
 	}
 }
