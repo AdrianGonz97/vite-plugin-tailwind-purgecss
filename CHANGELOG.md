@@ -1,5 +1,11 @@
 # vite-plugin-tailwind-purgecss
 
+## 0.3.4
+
+### Patch Changes
+
+- 8656309: chore: add Vite 6 peer dependency
+
 ## 0.3.3
 
 ### Patch Changes
